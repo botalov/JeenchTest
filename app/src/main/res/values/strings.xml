@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">JeenchTest</string>
+    <string name="base_url">https://jsonplaceholder.typicode.com/</string>
+
+    <string name="albums">Albums</string>
+    <string name="posts">Posts</string>
+    <string name="title_activity_test">TestActivity</string>
+
+    <string name="title">Title</string>
+    <string name="body">Body</string>
+
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
+</resources>
