@@ -1,7 +1,6 @@
-package com.developer.sixfingers.jeenchtest.helpers;
+package com.developer.sixfingers.jeenchtest.requestInerfaces;
 
 import com.developer.sixfingers.jeenchtest.models.AlbumModel;
-import com.developer.sixfingers.jeenchtest.models.UserModel;
 
 import java.util.List;
 

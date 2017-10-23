@@ -12,8 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.developer.sixfingers.jeenchtest.adapters.ListAlbumsAdapter;
-import com.developer.sixfingers.jeenchtest.adapters.ListPostsAdapter;
-import com.developer.sixfingers.jeenchtest.helpers.RequestAlbumsInterface;
+import com.developer.sixfingers.jeenchtest.requestInerfaces.RequestAlbumsInterface;
 import com.developer.sixfingers.jeenchtest.models.AlbumModel;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
@@ -21,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -28,14 +28,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class AlbumsFragment extends Fragment {
 
-    private int userId;
+    private CompositeDisposable compositeDisposable;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //TODO:
-        userId = GlobalData.getInstance().userId;
+        compositeDisposable = new CompositeDisposable();
     }
 
     @Override
@@ -58,10 +57,10 @@ public class AlbumsFragment extends Fragment {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build().create(RequestAlbumsInterface.class);
 
-        requestAlbumsInterface.albums(GlobalData.getInstance().userId)
+        compositeDisposable.add(requestAlbumsInterface.albums(GlobalData.getInstance().userId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(this::handleAlbumsResponse,this::handleError);
+                .subscribe(this::handleAlbumsResponse,this::handleError));
     }
 
     private void handleAlbumsResponse(List<AlbumModel> androidList) {
@@ -75,5 +74,11 @@ public class AlbumsFragment extends Fragment {
 
     private void handleError(Throwable error) {
         Toast.makeText(this.getContext(), "Error ".concat(error.getLocalizedMessage()), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        compositeDisposable.clear();
     }
 }

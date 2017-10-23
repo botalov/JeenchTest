@@ -1,4 +1,4 @@
-package com.developer.sixfingers.jeenchtest.helpers;
+package com.developer.sixfingers.jeenchtest.requestInerfaces;
 
 import com.developer.sixfingers.jeenchtest.models.PostModel;
 
@@ -12,3 +12,4 @@ public interface RequestPostsInterface{
     @GET("posts/")
     Observable<List<PostModel>> posts(@Query("userId") int userId);
 }
+

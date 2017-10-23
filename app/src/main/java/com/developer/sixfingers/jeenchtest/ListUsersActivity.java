@@ -8,7 +8,7 @@ import android.widget.Toast;
 
 import com.developer.sixfingers.jeenchtest.adapters.ListUsersAdapter;
 import com.developer.sixfingers.jeenchtest.helpers.PermissionsHelper;
-import com.developer.sixfingers.jeenchtest.helpers.RequestUsersInterface;
+import com.developer.sixfingers.jeenchtest.requestInerfaces.RequestUsersInterface;
 import com.developer.sixfingers.jeenchtest.models.UserModel;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -23,16 +24,19 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ListUsersActivity extends AppCompatActivity {
 
     private RecyclerView usersRecyclerView;
+    private CompositeDisposable compositeDisposable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_users);
 
-        usersRecyclerView = (RecyclerView)findViewById(R.id.rv_users);
+        usersRecyclerView = findViewById(R.id.rv_users);
         usersRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         PermissionsHelper.verifyPermissions(this);
+
+        compositeDisposable = new CompositeDisposable();
 
         RequestUsersInterface requestUsersInterface = new Retrofit.Builder()
                 .baseUrl(getString(R.string.base_url))
@@ -40,10 +44,10 @@ public class ListUsersActivity extends AppCompatActivity {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build().create(RequestUsersInterface.class);
 
-        requestUsersInterface.users()
+        compositeDisposable.add(requestUsersInterface.users()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(this::handleResponse,this::handleError);
+                .subscribe(this::handleResponse,this::handleError));
 
     }
 
@@ -56,5 +60,11 @@ public class ListUsersActivity extends AppCompatActivity {
 
     private void handleError(Throwable error) {
         Toast.makeText(this, "Error ".concat(error.getLocalizedMessage()), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        compositeDisposable.clear();
     }
 }

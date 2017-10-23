@@ -10,12 +10,14 @@
         android:layout_height="match_parent">
 
         <EditText
+            android:id="@+id/et_addPostTitle"
             android:hint="@string/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"/>
 
         <EditText
+            android:id="@+id/et_addPostBody"
             android:hint="@string/body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -28,11 +30,13 @@
 
             <TableRow>
                 <Button
+                    android:id="@+id/btn_addPostOk"
                     android:text="@string/ok"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent" />
 
                 <Button
+                    android:id="@+id/btn_addPostCancel"
                     android:text="@string/cancel"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent" />

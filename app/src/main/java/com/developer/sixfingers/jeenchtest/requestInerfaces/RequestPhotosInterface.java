@@ -1,4 +1,4 @@
-package com.developer.sixfingers.jeenchtest.helpers;
+package com.developer.sixfingers.jeenchtest.requestInerfaces;
 
 import com.developer.sixfingers.jeenchtest.models.PhotoModel;
 

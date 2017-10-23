@@ -20,7 +20,7 @@
         app:layout_anchor="@+id/rv_posts"
         app:layout_anchorGravity="right|bottom"
         app:layout_behavior="com.developer.sixfingers.jeenchtest.helpers.FAB_Hide_on_Scroll"
-        app:srcCompat="@android:drawable/ic_input_add"
+        app:srcCompat="@drawable/plus"
         />
 
 
