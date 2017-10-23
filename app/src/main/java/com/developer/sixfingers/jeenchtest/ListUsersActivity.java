@@ -1,15 +1,15 @@
 package com.developer.sixfingers.jeenchtest;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
 import com.developer.sixfingers.jeenchtest.adapters.ListUsersAdapter;
 import com.developer.sixfingers.jeenchtest.helpers.PermissionsHelper;
-import com.developer.sixfingers.jeenchtest.requestInerfaces.RequestUsersInterface;
 import com.developer.sixfingers.jeenchtest.models.UserModel;
+import com.developer.sixfingers.jeenchtest.requestInerfaces.RequestUsersInterface;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 import java.util.ArrayList;
@@ -34,7 +34,7 @@ public class ListUsersActivity extends AppCompatActivity {
         usersRecyclerView = findViewById(R.id.rv_users);
         usersRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        PermissionsHelper.verifyPermissions(this);
+        PermissionsHelper.verifyStoragePermissions(this);
 
         compositeDisposable = new CompositeDisposable();
 
@@ -47,8 +47,7 @@ public class ListUsersActivity extends AppCompatActivity {
         compositeDisposable.add(requestUsersInterface.users()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(this::handleResponse,this::handleError));
-
+                .subscribe(this::handleResponse, this::handleError));
     }
 
     private void handleResponse(List<UserModel> androidList) {
@@ -61,6 +60,7 @@ public class ListUsersActivity extends AppCompatActivity {
     private void handleError(Throwable error) {
         Toast.makeText(this, "Error ".concat(error.getLocalizedMessage()), Toast.LENGTH_SHORT).show();
     }
+
 
     @Override
     public void onDestroy() {

@@ -60,9 +60,7 @@ public class AddPostDialogFragment extends DialogFragment {
         });
 
         Button btnCancel = v.findViewById(R.id.btn_addPostCancel);
-        btnCancel.setOnClickListener(view -> {
-            this.dismiss();
-        });
+        btnCancel.setOnClickListener(view -> this.dismiss());
 
         return v;
     }

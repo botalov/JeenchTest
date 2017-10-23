@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 
+
 public class PermissionsHelper {
 
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
@@ -14,7 +15,7 @@ public class PermissionsHelper {
             Manifest.permission.ACCESS_NETWORK_STATE
     };
 
-    public static void verifyPermissions(Activity activity) {
+    public static void verifyStoragePermissions(Activity activity) {
         int permissionINTERNET = ActivityCompat.checkSelfPermission(activity, Manifest.permission.INTERNET);
         int permissionACCESS_NETWORK_STATE = ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_NETWORK_STATE);
 
