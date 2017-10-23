@@ -35,16 +35,28 @@ public class AddPostDialogFragment extends DialogFragment {
             String body = ((EditText)v.findViewById(R.id.et_addPostBody)).getText().toString();
             String title = ((EditText)v.findViewById(R.id.et_addPostTitle)).getText().toString();
 
-            RequestAddPostsInterface requestAddPostsInterface = new Retrofit.Builder()
-                    .baseUrl(getString(R.string.base_url))
-                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build().create(RequestAddPostsInterface.class);
+            if(!body.isEmpty() && !title.isEmpty()) {
+                RequestAddPostsInterface requestAddPostsInterface = new Retrofit.Builder()
+                        .baseUrl(getString(R.string.base_url))
+                        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build().create(RequestAddPostsInterface.class);
 
-            compositeDisposable.add(requestAddPostsInterface.addPost(GlobalData.getInstance().userId, title, body)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(this::handleResponse,this::handleError));
+                compositeDisposable.add(requestAddPostsInterface.addPost(GlobalData.getInstance().userId, title, body)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(this::handleResponse, this::handleError));
+            }
+            else{
+                String sMessage = getString(R.string.fill_fields);
+                if(title.isEmpty()){
+                    sMessage = sMessage.concat(getString(R.string.title)).concat("; ");
+                }
+                if(body.isEmpty()){
+                    sMessage = sMessage.concat(getString(R.string.body)).concat("; ");
+                }
+                Toast.makeText(this.getContext(), sMessage, Toast.LENGTH_SHORT).show();
+            }
         });
 
         Button btnCancel = v.findViewById(R.id.btn_addPostCancel);
@@ -56,7 +68,7 @@ public class AddPostDialogFragment extends DialogFragment {
     }
 
     private void handleResponse(PostModel postModel) {
-        Toast.makeText(this.getContext(), "Successful!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this.getContext(), getString(R.string.successful), Toast.LENGTH_SHORT).show();
         this.dismiss();
     }
 
